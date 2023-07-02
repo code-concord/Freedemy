@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Ysabeau+SC:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Akatab:wght@500&display=swap');
+
+
+.item:hover{
+    border-bottom: 2px solid white;
+    transition: 0.17s;
+}
+
+.navbar{
+    background-color: #031d44
+}
+
+.learn{
+    /* the test in this is "Learn without limits". divide it in 2 lines from without*/
+    /* font-weight: calc(1000); */
+    font-size: 3rem;
+    text-align: center;
+
+    color: #031d44;
+    /* font-family: 'Ysabeau SC', sans-serif; */
+    font-family: 'Poppins', sans-serif;
+    margin-top: 2rem;
+    /* width: 750px; */
+}
+
+.text{
+    padding: 20px 20px 0px 20px;
+    text-align: center;
+    font-family: 'Akatab', sans-serif;
+    font-size: 20px;
+}
+
+.btn{
+    color: aliceblue;
+    background-color: #031d44;
+    width: 250px;
+    padding: 20px;
+    margin: 20px 35px 0 65px;
+    border-radius: 6px;
+    font-family: 'Akatab', sans-serif;
+    font-size: 16px;
+}
+
+.btn:hover{
+    background-color: #084b83;
+    transition: 0.2s;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container{
+    width: 100%;
+    min-width: 100%;
+}
+
+.container .row{
+    width: 80%;
+    margin: auto;
+}
+
+.container .row .header{
+    width: 60%;
+    text-align: center;
+    margin: auto;
+}
+
+.container .row .header h1{
+    font-size: 45px;
+    color: #031d44;
+    padding-top: 35px;
+}
+
+.content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+.content .card{
+    flex: 1;
+    margin: 50px 20px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.content .card img{
+    width: 100%;
+    height: auto;
+}
+
+.content .card h4{
+    margin-top: 16px;
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+.content .card p{
+    font-size: 15px;
+    color: #6e6e6e;
+    line-height: 1.5;
+    padding: 10px;
+}
+
+@media screen and (max-width: 768px){
+    .content{
+        flex-direction: column;
+    }
+}
+
+.right .img{
+    width: 120rem;
+    height: auto;
+}
