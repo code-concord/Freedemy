@@ -22,5 +22,13 @@
     "express": "^4.18.2",
     "node-cache": "^5.1.2",
     "nodemon": "^2.0.22"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LakshitAgarwal/Freedemy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LakshitAgarwal/Freedemy/issues"
+  },
+  "homepage": "https://github.com/LakshitAgarwal/Freedemy#readme"
 }
