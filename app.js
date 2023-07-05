@@ -31,7 +31,7 @@ app.get("/", async (req, res) => {
   }
 });
 
-// Function to scrape the data and return the links
+// Function to scrape the data and return the links and H1 headings
 async function scrapeData() {
   try {
     const url = "https://www.discudemy.com/all/1"; // Update the URL here
@@ -40,7 +40,7 @@ async function scrapeData() {
     const courseElements = $(".card-header");
     const links = [];
 
-    // Concurrently scrape course links
+    // Concurrently scrape course links and H1 headings
     const coursePromises = courseElements.toArray().map(async (element) => {
       const page = $(element).attr("href");
       const courseResponse = await axios.get(page);
@@ -56,20 +56,30 @@ async function scrapeData() {
       const courseLinkResponse = await axios.get(courseLink);
       const courseLinkData = courseLinkResponse.data;
 
-      // Extract the desired data from courseLinkData using Cheerio
-      // For example, let's extract the title of the course
-      const courseLinkPage = cheerio.load(courseLinkData);
-      const link = courseLinkPage("#couponLink").attr("href");
-      return link;
+      // Extract the desired data from coursePage using Cheerio
+      // For example, let's extract the H1 heading of the course
+      const h1 = coursePage("#description-text > h1").text(); // Scraping the H1 heading
+
+      return { courseLink, h1 }; // Return an object containing the course link and H1 heading
     });
 
     // Await all concurrent scraping requests
-    const courseLinks = await Promise.all(coursePromises);
-    for (const link of courseLinks) {
+    const courseData = await Promise.all(coursePromises);
+    for (const { courseLink, h1 } of courseData) {
+      const courseLinkResponse = await axios.get(courseLink);
+      const courseLinkData = courseLinkResponse.data;
+
+      // Extract the desired data from courseLinkData using Cheerio
+      // For example, let's extract the link of the course
+      const courseLinkPage = cheerio.load(courseLinkData);
+      const link = courseLinkPage("#couponLink").attr("href");
+
       if (link) {
-        links.push(link);
+        links.push({ link, h1 });
       }
     }
+
+    console.log("Scraped data:", links); // Log the scraped data
 
     console.log("Scraped data updated");
     return links;
