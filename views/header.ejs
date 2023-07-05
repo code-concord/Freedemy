@@ -1,4 +1,4 @@
-<div class="navbar flex justify-between items-center p-4 md:p-7">
+<div class="navbar flex justify-between items-center">
   <!-- This is code for hamburger -->
   <div class="ham inline-block p-4 cursor-pointer md:hidden">
     <div class="line h-0.5 w-6 bg-white my-1"></div>
@@ -9,14 +9,19 @@
   <!-- Code for central logo-->
   <div class="logo text-center flex">
     <div
-      class="text-white logoImg md:mr-10 cursor-pointer"
-      style="font-family: 'Pacifico', cursive"
+      class="text-white logoImg md:mr-10 cursor-pointer logo items-center"
+      style="
+        text-align: center;
+        margin: auto 20px;
+        font-family: 'Pacifico', cursive;
+        font-size: 1.8rem;
+      "
     >
       FreeDemy
       <!-- <img src="./logo.png" class="w-52" alt="" /> -->
     </div>
     <div
-      class="navItems w-fit md:static md:w-auto absolute inset-0 md:flex md:mx-4 -translate-x-96 md:translate-x-0"
+      class="p-4 md:p-7 navItems w-fit md:static md:w-auto absolute inset-0 md:flex md:mx-4 -translate-x-96 md:translate-x-0"
     >
       <div class="item mx-6 cursor-pointer text-white">Home</div>
       <div class="item mx-6 cursor-pointer text-white">Courses</div>

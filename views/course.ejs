@@ -15,23 +15,20 @@
       <div
         class="right flex justify-center m-7 md:w-full md:h-1/2 md:m-auto md:items-center"
       >
-        <img src="/images/productImageTest.jpeg" class="headerImg" alt="" />
+        <img src="<%= course.image %>" class="headerImg" alt="" />
       </div>
       <div class="left align-middle md:ml-0">
         <div
           class="learn text-black text-2xl md:mt-10 md:pt-12 ml-7 text-left md:ml-0"
           id="classKMKB"
         >
-          <%= h1 %>
+          <%= course.h1 %>
         </div>
         <div class="text text-base text-left ml-7 md:ml-0">
           <h2 class="text-xl md:text-3xl mb-2 mt-4 text-black specialFont">
             Description
           </h2>
-          <div class="md:text-xl md:max-w-2xl">
-            Build Fullstack WebApp with Next.js, React, and Strapi backend.
-            Storybook components library. Practical Next.js & React.
-          </div>
+          <div class="md:text-xl md:max-w-2xl"><%= course.desc %></div>
           <h2 class="text-xl mt-6 mb-5 text-black md:text-3xl specialFont">
             Price: <s class="text-red-600">$44</s>
             <span class="text-green-800">Free!!</span>
@@ -39,7 +36,9 @@
         </div>
 
         <div class="deskBtn text-center md:text-left md:ml-0 mb-7">
-          <button class="btn">Enroll Now</button>
+          <button class="btn">
+            <a href="<%= course.link %>">Enroll Now</a>
+          </button>
         </div>
       </div>
     </div>

@@ -33,12 +33,28 @@ app.get("/", async (req, res) => {
 
 // Route handler for the course description page
 app.get("/course/:h1", async (req, res) => {
-  const h1 = req.params.h1;
-  // You can retrieve the detailed description for the corresponding course based on the "h1" parameter
-  // Perform any necessary data retrieval or processing here
+  try {
+    const h1 = req.params.h1;
+    // Fetch the links from the cache or scrape them if not available
+    let links = cache.get("links");
+    if (!links) {
+      links = await scrapeData();
+      cache.set("links", links, scrapeInterval);
+    }
 
-  // Render the detailed course description page
-  res.render("course", { h1 }); // Assuming you have a "course.ejs" file for the detailed course description
+    // Find the specific link based on the "h1" parameter
+    const course = links.find((course) => course.h1 === h1);
+
+    if (course) {
+      // Render the detailed course description page with the corresponding course data
+      res.render("course", { course });
+    } else {
+      res.status(404).send("Course not found");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 // Function to scrape the data and return the links, H1 headings, and images
@@ -50,7 +66,7 @@ async function scrapeData() {
     const courseElements = $(".card-header");
     const links = [];
 
-    // Concurrently scrape course links, H1 headings, and images
+    // Concurrently scrape course links, H1 headings, and images with limited concurrency
     const coursePromises = courseElements.toArray().map(async (element) => {
       const page = $(element).attr("href");
       const courseResponse = await axios.get(page);
@@ -58,11 +74,11 @@ async function scrapeData() {
 
       const coursePage = cheerio.load(courseData);
       const courseLink = coursePage(
-        "body > div.ui.container.item-f > div > section > div:nth-child(5) > div > a"
+        'body > div[class^="ui container"] > div > section > div:nth-child(5) > div > a'
       ).attr("href");
 
       const image = coursePage(
-        "body > div.ui.container.item-f > div > section > div.ui.center.aligned.attached.segment > amp-img"
+        'body > div[class^="ui container"] > div > section > div.ui.center.aligned.attached.segment > amp-img'
       ).attr("src"); // Update the image selector
 
       const h1 = coursePage("#description-text > h1").text();
@@ -78,8 +94,16 @@ async function scrapeData() {
       return { courseLink, h1, image, desc };
     });
 
-    // Await all concurrent scraping requests
-    const courseData = await Promise.all(coursePromises);
+    // Limit concurrency using Promise.all with a concurrency limit of 5
+    const concurrencyLimit = 5;
+    const courseData = [];
+    for (let i = 0; i < coursePromises.length; i += concurrencyLimit) {
+      const batch = coursePromises.slice(i, i + concurrencyLimit);
+      const batchResult = await Promise.all(batch);
+      courseData.push(...batchResult);
+    }
+
+    // Process the course links to fetch the final data
     for (const { courseLink, h1, image, desc } of courseData) {
       const courseLinkResponse = await axios.get(courseLink);
       const courseLinkData = courseLinkResponse.data;
