@@ -86,7 +86,7 @@
   background-color: #fff;
   max-width: 350px;
   min-width: 250px;
-  height: 400px;
+  height: 450px;
   border-radius: 10px;
   animation-duration: 0.7s;
   animation-fill-mode: forwards;
@@ -227,4 +227,21 @@
 .footerSpan,
 .footerContainer {
   color: #cccccc;
+}
+
+.cardBtn {
+  color: aliceblue;
+  background-color: #031d44;
+  width: 250px;
+  padding: 20px;
+  margin: 20px 0px 0 0px;
+  border-radius: 6px;
+  font-family: 'Akatab', sans-serif;
+  font-size: 16px;
+}
+
+.cardBtn:hover {
+  background-color: #033683;
+  font-size: 18px;
+  transition: 0.2s;
 }
