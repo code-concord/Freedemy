@@ -12,6 +12,8 @@
   background-color: #031d44;
 }
 
+
+
 .learn {
   font-size: 3rem;
   text-align: center;
@@ -230,18 +232,59 @@
 }
 
 .cardBtn {
-  color: aliceblue;
-  background-color: #031d44;
-  width: 250px;
-  padding: 20px;
-  margin: 20px 0px 0 0px;
-  border-radius: 6px;
-  font-family: 'Akatab', sans-serif;
-  font-size: 16px;
-}
-
-.cardBtn:hover {
-  background-color: #033683;
-  font-size: 18px;
-  transition: 0.2s;
-}
+    position: relative;
+    width: 250px;
+    height: 60px;
+    border: none;
+    border-radius: 30px;
+    background-color: #031d44;
+    color: aliceblue;
+    font-family: 'Akatab', sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 1;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+  }
+  
+  .cardBtn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    background-color: #084b83;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    z-index: -1;
+  }
+  
+  .cardBtn::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: rgba(0, 227, 255, 0.5);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.4s ease-in-out;
+    z-index: -1;
+  }
+  
+  .cardBtn:hover {
+    box-shadow: 0 0 5px 1px #00e3ff, 0 0 10px 1px #00e3ff, 0 0 30px 2px #00e3ff;
+  }
+  
+  .cardBtn:hover::before {
+    transform: translateY(0);
+  }
+  
+  .cardBtn:hover::after {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.7;
+  }
+  
