@@ -31,6 +31,16 @@ app.get("/", async (req, res) => {
   }
 });
 
+// Route handler for the course description page
+app.get("/course/:h1", async (req, res) => {
+  const h1 = req.params.h1;
+  // You can retrieve the detailed description for the corresponding course based on the "h1" parameter
+  // Perform any necessary data retrieval or processing here
+
+  // Render the detailed course description page
+  res.render("course", { h1 }); // Assuming you have a "course.ejs" file for the detailed course description
+});
+
 // Function to scrape the data and return the links, H1 headings, and images
 async function scrapeData() {
   try {

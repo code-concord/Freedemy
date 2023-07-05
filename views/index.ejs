@@ -71,18 +71,18 @@
       <div class="row">
         <div class="content">
           <% links.forEach(function(link) { %>
-
-          <div class="card">
-            <img src="<%= link.image %>" alt="" />
-            <h4><%= link.h1 %></h4>
-            <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nisi
-              enim odit nesciunt quos, laborum nostrum? Lorem, ipsum dolor sit
-              amet consectetur adipisicing elit. Magni, dicta. Lorem ipsum dolor
-              sit amet consectetur adipisicing elit. Harum, nesciunt!
-            </p>
-          </div>
-
+          <a href="/course/<%= link.h1 %>">
+            <div class="card">
+              <img src="<%= link.image %>" alt="" />
+              <h4><%= link.h1 %></h4>
+              <p>
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nisi
+                enim odit nesciunt quos, laborum nostrum? Lorem, ipsum dolor sit
+                amet consectetur adipisicing elit. Magni, dicta. Lorem ipsum
+                dolor sit amet consectetur adipisicing elit. Harum, nesciunt!
+              </p>
+            </div>
+          </a>
           <% }); %>
         </div>
       </div>
