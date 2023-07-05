@@ -31,7 +31,7 @@ app.get("/", async (req, res) => {
   }
 });
 
-// Function to scrape the data and return the links
+// Function to scrape the data and return the links, H1 headings, and images
 async function scrapeData() {
   try {
     const url = "https://www.discudemy.com/all/1"; // Update the URL here
@@ -40,36 +40,41 @@ async function scrapeData() {
     const courseElements = $(".card-header");
     const links = [];
 
-    // Concurrently scrape course links
+    // Concurrently scrape course links, H1 headings, and images
     const coursePromises = courseElements.toArray().map(async (element) => {
       const page = $(element).attr("href");
       const courseResponse = await axios.get(page);
       const courseData = courseResponse.data;
 
-      // Extract the desired data from courseData using Cheerio
-      // For example, let's extract the title and the main data from the course link
       const coursePage = cheerio.load(courseData);
       const courseLink = coursePage(
         "body > div.ui.container.item-f > div > section > div:nth-child(5) > div > a"
       ).attr("href");
 
-      const courseLinkResponse = await axios.get(courseLink);
-      const courseLinkData = courseLinkResponse.data;
+      const image = coursePage(
+        "body > div.ui.container.item-f > div > section > div.ui.center.aligned.attached.segment > amp-img"
+      ).attr("src"); // Update the image selector
 
-      // Extract the desired data from courseLinkData using Cheerio
-      // For example, let's extract the title of the course
-      const courseLinkPage = cheerio.load(courseLinkData);
-      const link = courseLinkPage("#couponLink").attr("href");
-      return link;
+      const h1 = coursePage("#description-text > h1").text();
+
+      return { courseLink, h1, image };
     });
 
     // Await all concurrent scraping requests
-    const courseLinks = await Promise.all(coursePromises);
-    for (const link of courseLinks) {
+    const courseData = await Promise.all(coursePromises);
+    for (const { courseLink, h1, image } of courseData) {
+      const courseLinkResponse = await axios.get(courseLink);
+      const courseLinkData = courseLinkResponse.data;
+
+      const courseLinkPage = cheerio.load(courseLinkData);
+      const link = courseLinkPage("#couponLink").attr("href");
+
       if (link) {
-        links.push(link);
+        links.push({ link, h1, image });
       }
     }
+
+    console.log("Scraped data:", links); // Log the scraped data
 
     console.log("Scraped data updated");
     return links;
