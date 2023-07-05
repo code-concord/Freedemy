@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "vite"
+    "start": "npm",
+    "dev": "nodemon app.js",
+    "build": "npm i"
   },
   "keywords": [],
   "author": "",
