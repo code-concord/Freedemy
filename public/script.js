@@ -12,12 +12,8 @@ function isElementInViewport(element) {
   var rect = element.getBoundingClientRect();
   var windowHeight =
     window.innerHeight || document.documentElement.clientHeight;
-  var cardHeight = rect.height || element.offsetHeight;
 
-  // Calculate the height threshold for the card to be considered in the viewport
-  var threshold = cardHeight * 0.5;
-
-  return rect.top >= -threshold && rect.bottom <= windowHeight + threshold;
+  return rect.top <= windowHeight && rect.bottom >= 0;
 }
 
 // Function to handle the scroll event
@@ -34,4 +30,4 @@ function handleScrollAnimation() {
 window.addEventListener("scroll", handleScrollAnimation);
 
 // Trigger initial animation on page load
-handleScrollAnimation();
+window.addEventListener("load", handleScrollAnimation);
