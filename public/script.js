@@ -10,13 +10,14 @@ exploreCoursesBtn.addEventListener("click", () => {
 // Function to check if an element is in the viewport
 function isElementInViewport(element) {
   var rect = element.getBoundingClientRect();
-  return (
-    rect.top >= 0 &&
-    rect.left >= 0 &&
-    rect.bottom <=
-      (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-  );
+  var windowHeight =
+    window.innerHeight || document.documentElement.clientHeight;
+  var cardHeight = rect.height || element.offsetHeight;
+
+  // Calculate the height threshold for the card to be considered in the viewport
+  var threshold = cardHeight * 0.5;
+
+  return rect.top >= -threshold && rect.bottom <= windowHeight + threshold;
 }
 
 // Function to handle the scroll event

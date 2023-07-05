@@ -81,7 +81,7 @@
 .content .card {
   flex: 1;
   margin-top: 3rem;
-  box-shadow: 0 3px 10px rgb(0, 0, 0, 0.2);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
   background-color: #fff;
   max-width: 350px;
   min-width: 250px;
@@ -90,6 +90,9 @@
   animation-duration: 0.7s;
   animation-fill-mode: forwards;
   opacity: 0;
+  overflow: hidden;
+  /* New styles for hover effect */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .content .card.animated {
@@ -97,26 +100,23 @@
 }
 
 .content .card:hover {
-  transform: translateY(-15px);
-  cursor: pointer;
+  transform: translateY(-10px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
-@media screen and (min-width: 768px) {
-  .content .card {
-    margin: 50px 20px;
-  }
-}
-
-.content .card img {
-  width: 100%;
-  height: auto;
-  border-radius: 10px 10px 0 0;
+.content .card:hover img {
+  filter: brightness(60%);
+  transform: scale(1.1);
+  transition: 0.5s;
 }
 
 .content .card h4 {
   margin-top: 16px;
   margin-left: 10px;
   font-size: 18px;
+  font-family: 'Akatab', sans-serif;
+  font-weight: 500;
+  transition: font-weight 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
 }
 
 .content .card p {
@@ -124,11 +124,26 @@
   color: #6e6e6e;
   line-height: 1.5;
   padding: 10px;
+  font-family: 'Akatab', sans-serif;
+  font-weight: 400;
+  transition: font-weight 0.1s ease, transform 0.3s ease, opacity 0.3s ease;
 }
 
-@media screen and (max-width: 768px) {
-  .content {
-    flex-direction: column;
+.content .card:hover h4 {
+  font-weight: 700;
+  transform: translateY(5px);
+
+}
+
+.content .card:hover p {
+  font-weight: 600;
+  transform: translateY(5px);
+  opacity: 0.8;
+}
+
+@media screen and (min-width: 768px) {
+  .content .card {
+    margin: 50px 20px;
   }
 }
 
