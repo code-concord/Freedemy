@@ -108,6 +108,8 @@
     max-width: 350px;
     min-width: 250px;
     transition: transform 0.3s ease;
+    height: 450px;
+    border-radius: 10px;
 }
 
 .content .card:hover{
@@ -117,13 +119,14 @@
 
 @media screen and (min-width: 768px){
     .content .card{
-        margin: 50px 30px;
+        margin: 50px 20px;
     }
 }
 
 .content .card img{
     width: 100%;
     height: auto;
+    border-radius: 10px 10px 0 0;
 }
 
 .content .card h4{
