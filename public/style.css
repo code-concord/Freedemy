@@ -103,12 +103,18 @@
 .content .card{
     flex: 1;
     margin-top: 3rem;
-    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 10px rgb(0,0,0,0.2);
     background-color: #fff;
     max-width: 350px;
     min-width: 250px;
-
+    transition: transform 0.3s ease;
 }
+
+.content .card:hover{
+    transform: translateY(-15px);
+    cursor: pointer;
+}
+
 @media screen and (min-width: 768px){
     .content .card{
         margin: 50px 30px;
