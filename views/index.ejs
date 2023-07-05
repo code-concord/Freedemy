@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Freedemy</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body class="bgBody">
@@ -111,15 +115,6 @@
       </footer>
     </div>
 
-    <script>
-      // Get the button element
-      const exploreCoursesBtn = document.getElementById("exploreCoursesBtn");
-
-      // Scroll to the Recent Courses section when the button is clicked
-      exploreCoursesBtn.addEventListener("click", () => {
-        const recentCoursesSection = document.querySelector(".header");
-        recentCoursesSection.scrollIntoView({ behavior: "smooth" });
-      });
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
