@@ -67,12 +67,20 @@ async function scrapeData() {
 
       const h1 = coursePage("#description-text > h1").text();
 
-      return { courseLink, h1, image };
+      const desc = coursePage("div.ui.attached.segment")
+        .clone()
+        .children()
+        .remove()
+        .end()
+        .text()
+        .trim();
+
+      return { courseLink, h1, image, desc };
     });
 
     // Await all concurrent scraping requests
     const courseData = await Promise.all(coursePromises);
-    for (const { courseLink, h1, image } of courseData) {
+    for (const { courseLink, h1, image, desc } of courseData) {
       const courseLinkResponse = await axios.get(courseLink);
       const courseLinkData = courseLinkResponse.data;
 
@@ -80,7 +88,7 @@ async function scrapeData() {
       const link = courseLinkPage("#couponLink").attr("href");
 
       if (link) {
-        links.push({ link, h1, image });
+        links.push({ link, h1, image, desc });
       }
     }
 
