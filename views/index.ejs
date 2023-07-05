@@ -20,7 +20,7 @@
       <div class="logo text-center flex">
         <div class="text-white logoImg md:mr-10 cursor-pointer">
           FreeDemy
-          <!-- <img src="./logo.png" class="w-52" alt="" /> -->
+          <!-- <a href="./views/index.ejs">FreeDemy</a> -->
         </div>
         <div
           class="navItems w-fit md:static md:w-auto absolute inset-0 md:flex md:mx-4 -translate-x-96 md:translate-x-0"
@@ -54,7 +54,9 @@
         </div>
 
         <div class="deskBtn text-center md:text-left">
-          <button class="btn">Explore Courses</button>
+          <button onclick="scrollToContainer()" class="btn">
+            Explore Courses
+          </button>
         </div>
       </div>
 
@@ -114,5 +116,6 @@
         </div>
       </footer>
     </div>
+    <script src="./script.js"></script>
   </body>
 </html>
