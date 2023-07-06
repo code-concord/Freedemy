@@ -91,7 +91,11 @@ async function scrapeData() {
         .text()
         .trim();
 
-      return { courseLink, h1, image, desc };
+      const price = coursePage(
+        "body > div.ui.container.item-f > div > section > div:nth-child(4) > p:nth-child(4) > span"
+      ).text();
+
+      return { courseLink, h1, image, desc, price };
     });
 
     // Limit concurrency using Promise.all with a concurrency limit of 5
@@ -104,7 +108,7 @@ async function scrapeData() {
     }
 
     // Process the course links to fetch the final data
-    for (const { courseLink, h1, image, desc } of courseData) {
+    for (const { courseLink, h1, image, desc, price } of courseData) {
       const courseLinkResponse = await axios.get(courseLink);
       const courseLinkData = courseLinkResponse.data;
 
@@ -112,7 +116,7 @@ async function scrapeData() {
       const link = courseLinkPage("#couponLink").attr("href");
 
       if (link) {
-        links.push({ link, h1, image, desc });
+        links.push({ link, h1, image, desc, price });
       }
     }
 
