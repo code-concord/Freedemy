@@ -1,8 +1,13 @@
 // Get the button element
 const exploreCoursesBtn = document.getElementById("exploreCoursesBtn");
+const navCoursesButton = document.getElementById("navCourses");
 
 // Scroll to the Recent Courses section when the button is clicked
 exploreCoursesBtn.addEventListener("click", () => {
+  const recentCoursesSection = document.querySelector(".header");
+  recentCoursesSection.scrollIntoView({ behavior: "smooth" });
+});
+navCoursesButton.addEventListener("click", () => {
   const recentCoursesSection = document.querySelector(".header");
   recentCoursesSection.scrollIntoView({ behavior: "smooth" });
 });
