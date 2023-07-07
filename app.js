@@ -4,6 +4,7 @@ const cheerio = require("cheerio");
 const NodeCache = require("node-cache");
 const ejs = require("ejs");
 const path = require("path");
+const { scrapSingleCourse, scrapPage } = require("./scrape");
 
 const app = express();
 const cache = new NodeCache();
@@ -16,15 +17,19 @@ app.use(express.static("public"));
 // Route handler for the homepage
 app.get("/", async (req, res) => {
   try {
+    var page = req.query.page || 1;
     // Fetch the links from the cache or scrape them if not available
     let links = cache.get("links");
-    if (!links) {
-      links = await scrapeData();
+    let oldPage = cache.get("oldPage");
+    // console.log(oldPage,page);
+    if (!links || oldPage != page) {
+      cache.set("oldPage",page);
+      links = await scrapPage(page);
       cache.set("links", links, scrapeInterval);
     }
 
     // Render the EJS template with the links
-    res.render("index", { links });
+    res.render("index", { links,page });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -38,15 +43,17 @@ app.get("/course/:h1", async (req, res) => {
     // Fetch the links from the cache or scrape them if not available
     let links = cache.get("links");
     if (!links) {
-      links = await scrapeData();
+      links = await scrapPage(1);
       cache.set("links", links, scrapeInterval);
     }
 
     // Find the specific link based on the "h1" parameter
     const course = links.find((course) => course.h1 === h1);
+    course.link = await scrapSingleCourse(course.courseLink);
 
+    console.log(course);  
     if (course) {
-      // Render the detailed course description page with the corresponding course data
+      // Render the detailed course d escription page with the corresponding course data
       res.render("course", { course });
     } else {
       res.status(404).send("Course not found");
@@ -57,78 +64,7 @@ app.get("/course/:h1", async (req, res) => {
   }
 });
 
-// Function to scrape the data and return the links, H1 headings, and images
-async function scrapeData() {
-  try {
-    const url = "https://www.discudemy.com/all/1"; // Update the URL here
-    const response = await axios.get(url);
-    const $ = cheerio.load(response.data);
-    const courseElements = $(".card-header");
-    const links = [];
 
-    // Concurrently scrape course links, H1 headings, and images with limited concurrency
-    const coursePromises = courseElements.toArray().map(async (element) => {
-      const page = $(element).attr("href");
-      const courseResponse = await axios.get(page);
-      const courseData = courseResponse.data;
-
-      const coursePage = cheerio.load(courseData);
-      const courseLink = coursePage(
-        'body > div[class^="ui container"] > div > section > div:nth-child(5) > div > a'
-      ).attr("href");
-
-      const image = coursePage(
-        'body > div[class^="ui container"] > div > section > div.ui.center.aligned.attached.segment > amp-img'
-      ).attr("src"); // Update the image selector
-
-      const h1 = coursePage("#description-text > h1").text();
-
-      const desc = coursePage("div.ui.attached.segment")
-        .clone()
-        .children()
-        .remove()
-        .end()
-        .text()
-        .trim();
-
-      const price = coursePage(
-        "body > div.ui.container.item-f > div > section > div:nth-child(4) > p:nth-child(4) > span"
-      ).text();
-
-      return { courseLink, h1, image, desc, price };
-    });
-
-    // Limit concurrency using Promise.all with a concurrency limit of 5
-    const concurrencyLimit = 5;
-    const courseData = [];
-    for (let i = 0; i < coursePromises.length; i += concurrencyLimit) {
-      const batch = coursePromises.slice(i, i + concurrencyLimit);
-      const batchResult = await Promise.all(batch);
-      courseData.push(...batchResult);
-    }
-
-    // Process the course links to fetch the final data
-    for (const { courseLink, h1, image, desc, price } of courseData) {
-      const courseLinkResponse = await axios.get(courseLink);
-      const courseLinkData = courseLinkResponse.data;
-
-      const courseLinkPage = cheerio.load(courseLinkData);
-      const link = courseLinkPage("#couponLink").attr("href");
-
-      if (link) {
-        links.push({ link, h1, image, desc, price });
-      }
-    }
-
-    console.log("Scraped data:", links); // Log the scraped data
-
-    console.log("Scraped data updated");
-    return links;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
 
 // Start the server
 const port = 3000;
