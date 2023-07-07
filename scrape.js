@@ -34,10 +34,10 @@ async function scrapPage(page) {
 
 async function scrapSingleCourse(courseLink) {
     var courseLinkRemove = courseLink.split("/");
-    courseLinkRemove = courseLinkRemove.slice(4,5)[0];
-    courseLinkRemove = "https://www.discudemy.com/go/" + courseLinkRemove;
+    courseLinkRemove[3] = 'go';
+    courseLink = courseLinkRemove.join("/");
 
-    const courseLinkResponse = await axios.get(courseLinkRemove);
+    const courseLinkResponse = await axios.get(courseLink);
     const courseLinkData = courseLinkResponse.data;
     const courseLinkPage = cheerio.load(courseLinkData);
     return courseLinkPage("#couponLink").attr("href");
