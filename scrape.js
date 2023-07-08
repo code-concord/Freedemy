@@ -16,7 +16,7 @@ async function scrapPage(page) {
             var h1 = $(".card-header").text();
             var image = $("amp-img").attr('src')?.replace('240x135', '480x270');
             var desc = $(".description").text().trim();
-            var price = $("span:nth-child(2):first").text().trim();
+            var price = $("span:nth-child(2):first").text().trim().replace('->$0','');
             var c = { courseLink, h1, image, desc, price };
             if(h1.length > 0){
                 list.push(c);
