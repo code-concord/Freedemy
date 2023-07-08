@@ -247,7 +247,7 @@
     transition: box-shadow 0.3s;
   }
   
-  .cardBtn::before {
+.cardBtn::before {
     content: '';
     position: absolute;
     top: 0;
@@ -261,7 +261,7 @@
     z-index: -1;
   }
   
-  .cardBtn::after {
+.cardBtn::after {
     content: '';
     position: absolute;
     top: -100%;
@@ -275,16 +275,19 @@
     z-index: -1;
   }
   
-  .cardBtn:hover {
+.cardBtn:hover {
     box-shadow: 0 0 5px 1px #00e3ff, 0 0 10px 1px #00e3ff, 0 0 30px 2px #00e3ff;
   }
   
-  .cardBtn:hover::before {
+.cardBtn:hover::before {
     transform: translateY(0);
   }
   
-  .cardBtn:hover::after {
+.cardBtn:hover::after {
     transform: translate(-50%, -50%) scale(1);
     opacity: 0.7;
   }
-  
+
+.classForMarginTopMobile{
+  margin-top: 2rem;
+}
