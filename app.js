@@ -5,6 +5,7 @@ const NodeCache = require("node-cache");
 const ejs = require("ejs");
 const path = require("path");
 const { scrapSingleCourse, scrapPage } = require("./scrape");
+const { getRandomPropertyOfObject, getRandomNThingsFromArray } = require("./utils");
 
 const app = express();
 const cache = new NodeCache();
@@ -19,17 +20,25 @@ app.get("/", async (req, res) => {
   try {
     var page = req.query.page || 1;
     // Fetch the links from the cache or scrape them if not available
-    let links = cache.get("links");
+    let allLinks = cache.get("allLinks") ?? {};
     let oldPage = cache.get("oldPage");
     // console.log(oldPage,page);
-    if (!links || oldPage != page) {
+    if (allLinks == {} || oldPage != page) {
       cache.set("oldPage",page);
-      links = await scrapPage(page);
-      cache.set("links", links, scrapeInterval);
+
+      var newLinks = [];
+      if(page in allLinks){
+        newLinks = allLinks[page];
+      }else{
+        newLinks = await scrapPage(page);
+        allLinks[page] = newLinks;
+        cache.set("allLinks", allLinks, scrapeInterval);
+      }
+      currentLinks = newLinks;
     }
 
     // Render the EJS template with the links
-    res.render("index", { links,page });
+    res.render("index", { currentLinks,page });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -37,24 +46,33 @@ app.get("/", async (req, res) => {
 });
 
 // Route handler for the course description page
-app.get("/course/:h1", async (req, res) => {
+app.get("/course/:page/:h1", async (req, res) => {
   try {
     const h1 = req.params.h1;
+    const page = req.params.page;
     // Fetch the links from the cache or scrape them if not available
-    let links = cache.get("links");
-    if (!links) {
-      links = await scrapPage(1);
-      cache.set("links", links, scrapeInterval);
+    let allLinks = cache.get("allLinks") ?? {};
+    
+    if(page in allLinks){
+      var links = allLinks[page];
+    }
+    else{
+      links = await scrapPage(page);
+      allLinks[page] = links;
+      cache.set("allLinks", allLinks, scrapeInterval);
     }
 
     // Find the specific link based on the "h1" parameter
     const course = links.find((course) => course.h1 === h1);
     course.link = await scrapSingleCourse(course.courseLink);
 
+    var randomPage = getRandomPropertyOfObject(allLinks);
+    var randomCourses = getRandomNThingsFromArray(allLinks[randomPage], 3);
+
     console.log(course);  
     if (course) {
       // Render the detailed course d escription page with the corresponding course data
-      res.render("course", { course });
+      res.render("course", { course, randomCourses, randomPage });
     } else {
       res.status(404).send("Course not found");
     }
