@@ -21,11 +21,8 @@ app.get("/", async (req, res) => {
     var page = req.query.page || 1;
     // Fetch the links from the cache or scrape them if not available
     let allLinks = cache.get("allLinks") ?? {};
-    let oldPage = cache.get("oldPage");
     // console.log(oldPage,page);
-    if (allLinks == {} || oldPage != page) {
-      cache.set("oldPage",page);
-
+  
       var newLinks = [];
       if(page in allLinks){
         newLinks = allLinks[page];
@@ -35,7 +32,7 @@ app.get("/", async (req, res) => {
         cache.set("allLinks", allLinks, scrapeInterval);
       }
       currentLinks = newLinks;
-    }
+    
 
     // Render the EJS template with the links
     res.render("index", { currentLinks,page });
