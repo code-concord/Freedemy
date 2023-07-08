@@ -5,7 +5,10 @@ const NodeCache = require("node-cache");
 const ejs = require("ejs");
 const path = require("path");
 const { scrapSingleCourse, scrapPage } = require("./scrape");
-const { getRandomPropertyOfObject, getRandomNThingsFromArray } = require("./utils");
+const {
+  getRandomPropertyOfObject,
+  getRandomNThingsFromArray,
+} = require("./utils");
 
 const app = express();
 const cache = new NodeCache();
@@ -22,20 +25,19 @@ app.get("/", async (req, res) => {
     // Fetch the links from the cache or scrape them if not available
     let allLinks = cache.get("allLinks") ?? {};
     // console.log(oldPage,page);
-  
-      var newLinks = [];
-      if(page in allLinks){
-        newLinks = allLinks[page];
-      }else{
-        newLinks = await scrapPage(page);
-        allLinks[page] = newLinks;
-        cache.set("allLinks", allLinks, scrapeInterval);
-      }
-      currentLinks = newLinks;
-    
+
+    var newLinks = [];
+    if (page in allLinks) {
+      newLinks = allLinks[page];
+    } else {
+      newLinks = await scrapPage(page);
+      allLinks[page] = newLinks;
+      cache.set("allLinks", allLinks, scrapeInterval);
+    }
+    currentLinks = newLinks;
 
     // Render the EJS template with the links
-    res.render("index", { currentLinks,page });
+    res.render("index", { currentLinks, page });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -49,11 +51,10 @@ app.get("/course/:page/:h1", async (req, res) => {
     const page = req.params.page;
     // Fetch the links from the cache or scrape them if not available
     let allLinks = cache.get("allLinks") ?? {};
-    
-    if(page in allLinks){
+
+    if (page in allLinks) {
       var links = allLinks[page];
-    }
-    else{
+    } else {
       links = await scrapPage(page);
       allLinks[page] = links;
       cache.set("allLinks", allLinks, scrapeInterval);
@@ -66,7 +67,7 @@ app.get("/course/:page/:h1", async (req, res) => {
     var randomPage = getRandomPropertyOfObject(allLinks);
     var randomCourses = getRandomNThingsFromArray(allLinks[randomPage], 3);
 
-    console.log(course);  
+    console.log(course);
     if (course) {
       // Render the detailed course d escription page with the corresponding course data
       res.render("course", { course, randomCourses, randomPage });
@@ -79,7 +80,32 @@ app.get("/course/:page/:h1", async (req, res) => {
   }
 });
 
+// Route handler for searchbox
+app.get("/search", async (req, res) => {
+  try {
+    const searchTerm = req.query.term; // Get the search term from the query parameter
 
+    // Fetch the links from the cache or scrape them if not available
+    const allLinks = cache.get("allLinks") ?? {};
+    const searchResults = [];
+
+    // Iterate over all the pages and search for the term in each page's links
+    Object.values(allLinks).forEach((pageLinks) => {
+      const results = pageLinks.filter((link) =>
+        link.h1.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      searchResults.push(...results);
+    });
+
+    console.log(searchResults); // Print the searchResults to the console
+
+    // Send a JSON response with the matching links
+    res.json({ searchResults });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 // Start the server
 const port = 3000;

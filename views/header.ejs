@@ -48,7 +48,7 @@
     <img src="./images/account.png" alt="" />
   </div> -->
 
-  <section class="contain">
+  <!-- <section class="contain">
     <form>
       <input
         type="text"
@@ -56,6 +56,19 @@
         id="search-item"
         placeholder="Search Courses"
         onkeyup="search()"
+      />
+      <i class="fa-solid fa-magnifying-glass fa-xl text-white pl-3"></i>
+    </form>
+  </section>
+</div> -->
+
+  <section class="contain">
+    <form onsubmit="event.preventDefault(); search();">
+      <input
+        type="text"
+        name="term"
+        id="search-item"
+        placeholder="Search Courses"
       />
       <i class="fa-solid fa-magnifying-glass fa-xl text-white pl-3"></i>
     </form>
