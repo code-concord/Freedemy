@@ -19,7 +19,7 @@ async function scrapPage(page) {
             var price = $("span:nth-child(2):first").text().trim().replace('->$0','');
             var c = { courseLink, h1, image, desc, price };
             if(h1.length > 0){
-                list.push(c);
+                list.push(c);   
             }
 
         });
