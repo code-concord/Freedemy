@@ -87,6 +87,10 @@ const search = async () => {
 
         storeitems.appendChild(card);
       });
+
+      // Scroll to the search results section
+      const searchResultsSection = document.querySelector(".container");
+      searchResultsSection.scrollIntoView({ behavior: "smooth" });
     } else {
       console.error(data.error); // Log the error message to the console
     }
@@ -94,22 +98,3 @@ const search = async () => {
     console.error(error);
   }
 };
-
-// const search = ()=>{
-//   const searchbox = document.getElementById("search-item").value.toUpperCase();
-//   const storeitems = document.getElementById("content");
-//   const product = document.querySelectorAll(".card");
-//   const pname = storeitems.getElementsByTagName("h4");
-
-//   for(var i=0; i<pname.length; i++){
-//     let match = product[i].getElementsByTagName('h4')[0];
-//     if(match){
-//       let textvalue = match.textContent || match.innerHTML;
-//       if(textvalue.toUpperCase().indexOf(searchbox) > -1){
-//         product[i].style.display = "";
-//       }else{
-//         product[i].style.display = "none";
-//       }
-//     }
-//   }
-// }
