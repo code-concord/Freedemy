@@ -63,14 +63,20 @@
 </div> -->
 
   <section class="contain">
-    <form onsubmit="event.preventDefault(); search();">
+    <form
+      class="md:flex md:justify-center items-center"
+      onsubmit="event.preventDefault(); search();"
+    >
       <input
+        class="hidden md:block"
         type="text"
         name="term"
         id="search-item"
         placeholder="Search Courses"
       />
-      <i class="fa-solid fa-magnifying-glass fa-xl text-white pl-3"></i>
+      <button>
+        <i class="fa-solid fa-magnifying-glass fa-xl text-white pl-3"></i>
+      </button>
     </form>
   </section>
 </div>

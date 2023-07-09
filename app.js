@@ -87,9 +87,8 @@ app.get("/search", async (req, res) => {
 
     // Fetch the links from the cache or scrape them if not available
     const allLinks = cache.get("allLinks") ?? {};
-    const searchResults = [];
 
-    // Iterate over all the pages and search for the term in each page's links
+    const searchResults = [];
     Object.values(allLinks).forEach((pageLinks) => {
       const results = pageLinks.filter((link) =>
         link.h1.toLowerCase().includes(searchTerm.toLowerCase())
