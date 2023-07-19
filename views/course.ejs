@@ -16,53 +16,6 @@
     <title>Product</title>
   </head>
   <body>
-    <script>
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-
-      var enrollButton = document.getElementById("enroll-link");
-      var destinationValue = enrollButton.getAttribute("href");
-
-      var raw = JSON.stringify({
-        api_key: "6wncPRGLI4NPUsnzwkNGeTJ0RJ23",
-        monetization: true,
-        destination: destinationValue,
-        ad_page: 1,
-        category: "Education",
-        tags: [
-          "trendinglinks",
-          "udemy",
-          "courses",
-          "technology",
-          "coding",
-          "programming",
-        ],
-        monetize_with_money: false,
-        price: 0,
-        currency: "INR",
-        purchase_note: "",
-      });
-
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch("https://api.shareus.io/generate_link", requestOptions)
-        .then((response) => response.json()) // Parse the response as JSON
-        .then((data) => {
-          if (data && data.status === "success" && data.link) {
-            // Update the button link with the shortened link
-            enrollButton.setAttribute("href", data.link);
-            console.log("Shortened link:", data.link);
-          } else {
-            console.log("Unable to retrieve shortened link.");
-          }
-        })
-        .catch((error) => console.log("Error:", error));
-    </script>
     <!-- Code for navbar -->
     <%- include('header.ejs') %>
 
@@ -91,7 +44,12 @@
         </div>
 
         <div class="deskBtn text-center md:text-left md:ml-0 mb-7">
-          <a href="<%= course.link %>" target="_blank" id="enroll-link">
+          <a
+            href=""
+            target="_blank"
+            id="enroll-link"
+            data-destination="<%= course.link %>"
+          >
             <button class="btn">Enroll Now</button>
           </a>
         </div>
@@ -171,5 +129,59 @@
         </div>
       </footer>
     </div>
+
+    <script defer>
+      // Function to fetch the shortened link and update the button's href
+      function fetchShortenedLink() {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var enrollButton = document.getElementById("enroll-link");
+        var destinationValue = enrollButton.getAttribute("data-destination");
+
+        var raw = JSON.stringify({
+          api_key: "6wncPRGLI4NPUsnzwkNGeTJ0RJ23",
+          monetization: true,
+          destination: destinationValue,
+          ad_page: 1,
+          category: "Education",
+          tags: [
+            "trendinglinks",
+            "udemy",
+            "courses",
+            "technology",
+            "coding",
+            "programming",
+          ],
+          monetize_with_money: false,
+          price: 0,
+          currency: "INR",
+          purchase_note: "",
+        });
+
+        var requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
+
+        fetch("https://api.shareus.io/generate_link", requestOptions)
+          .then((response) => response.json()) // Parse the response as JSON
+          .then((data) => {
+            if (data && data.status === "success" && data.link) {
+              // Update the button link with the shortened link
+              enrollButton.setAttribute("href", data.link);
+              console.log("Shortened link:", data.link);
+            } else {
+              console.log("Unable to retrieve shortened link.");
+            }
+          })
+          .catch((error) => console.log("Error:", error));
+      }
+
+      // Call the function to fetch the shortened link
+      fetchShortenedLink();
+    </script>
   </body>
 </html>
