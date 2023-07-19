@@ -92,7 +92,11 @@ cacheAllPages().then(() => {
 
       // Find the specific link based on the "h1" parameter
       const course = links.find((course) => course.h1 === h1);
-      course.link = await scrapSingleCourse(course.courseLink);
+
+      // Check if the course object exists and has a "link" property
+      if (course && course.link) {
+        course.link = await scrapSingleCourse(course.courseLink);
+      }
 
       var randomPage = getRandomPropertyOfObject(allLinks);
       var randomCourses = getRandomNThingsFromArray(allLinks[randomPage], 3);
