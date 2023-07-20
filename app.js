@@ -17,6 +17,9 @@ const scrapeInterval = 3600; // Cache expiration time in seconds
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static("public"));
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(express.static("public"));
 
 // Route handler for the homepage
 app.get("/", async (req, res) => {
@@ -25,17 +28,40 @@ app.get("/", async (req, res) => {
     // Fetch the links from the cache or scrape them if not available
     let allLinks = cache.get("allLinks") ?? {};
     // console.log(oldPage,page);
+    // Route handler for the homepage
+    app.get("/", async (req, res) => {
+      try {
+        var page = req.query.page || 1;
+        // Fetch the links from the cache or scrape them if not available
+        let allLinks = cache.get("allLinks") ?? {};
+        // console.log(oldPage,page);
 
-    var newLinks = [];
-    if (page in allLinks) {
-      newLinks = allLinks[page];
-    } else {
-      newLinks = await scrapPage(page);
-      allLinks[page] = newLinks;
-      cache.set("allLinks", allLinks, scrapeInterval);
-    }
-    currentLinks = newLinks;
+        var newLinks = [];
+        if (page in allLinks) {
+          newLinks = allLinks[page];
+        } else {
+          newLinks = await scrapPage(page);
+          allLinks[page] = newLinks;
+          cache.set("allLinks", allLinks, scrapeInterval);
+        }
+        currentLinks = newLinks;
+        var newLinks = [];
+        if (page in allLinks) {
+          newLinks = allLinks[page];
+        } else {
+          newLinks = await scrapPage(page);
+          allLinks[page] = newLinks;
+          cache.set("allLinks", allLinks, scrapeInterval);
+        }
+        currentLinks = newLinks;
 
+        // Render the EJS template with the links
+        res.render("index", { currentLinks, page });
+      } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+      }
+    });
     // Render the EJS template with the links
     res.render("index", { currentLinks, page });
   } catch (error) {
@@ -51,26 +77,54 @@ app.get("/course/:page/:h1", async (req, res) => {
     const page = req.params.page;
     // Fetch the links from the cache or scrape them if not available
     let allLinks = cache.get("allLinks") ?? {};
+    // Route handler for the course description page
+    app.get("/course/:page/:h1", async (req, res) => {
+      try {
+        const h1 = req.params.h1;
+        const page = req.params.page;
+        // Fetch the links from the cache or scrape them if not available
+        let allLinks = cache.get("allLinks") ?? {};
 
-    if (page in allLinks) {
-      var links = allLinks[page];
-    } else {
-      links = await scrapPage(page);
-      allLinks[page] = links;
-      cache.set("allLinks", allLinks, scrapeInterval);
-    }
+        if (page in allLinks) {
+          var links = allLinks[page];
+        } else {
+          links = await scrapPage(page);
+          allLinks[page] = links;
+          cache.set("allLinks", allLinks, scrapeInterval);
+        }
+        if (page in allLinks) {
+          var links = allLinks[page];
+        } else {
+          links = await scrapPage(page);
+          allLinks[page] = links;
+          cache.set("allLinks", allLinks, scrapeInterval);
+        }
 
-    // Find the specific link based on the "h1" parameter
-    const course = links.find((course) => course.h1 === h1);
+        // Find the specific link based on the "h1" parameter
+        const course = links.find((course) => course.h1 === h1);
 
-    // Check if the course object exists and has a "link" property
-    if (course && course.link) {
-      course.link = await scrapSingleCourse(course.courseLink);
-    }
+        // Check if the course object exists and has a "link" property
+        if (course && course.link) {
+          course.link = await scrapSingleCourse(course.courseLink);
+        }
 
-    var randomPage = getRandomPropertyOfObject(allLinks);
-    var randomCourses = getRandomNThingsFromArray(allLinks[randomPage], 3);
+        var randomPage = getRandomPropertyOfObject(allLinks);
+        var randomCourses = getRandomNThingsFromArray(allLinks[randomPage], 3);
+        var randomPage = getRandomPropertyOfObject(allLinks);
+        var randomCourses = getRandomNThingsFromArray(allLinks[randomPage], 3);
 
+        console.log(course);
+        if (course) {
+          // Render the detailed course d escription page with the corresponding course data
+          res.render("course", { course, randomCourses, randomPage });
+        } else {
+          res.status(404).send("Course not found");
+        }
+      } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+      }
+    });
     console.log(course);
     if (course) {
       // Render the detailed course d escription page with the corresponding course data
@@ -88,20 +142,42 @@ app.get("/course/:page/:h1", async (req, res) => {
 app.get("/search", async (req, res) => {
   try {
     const searchTerm = req.query.term; // Get the search term from the query parameter
+    // Route handler for searchbox
+    app.get("/search", async (req, res) => {
+      try {
+        const searchTerm = req.query.term; // Get the search term from the query parameter
 
-    // Fetch the links from the cache or scrape them if not available
-    const allLinks = cache.get("allLinks") ?? {};
+        // Fetch the links from the cache or scrape them if not available
+        const allLinks = cache.get("allLinks") ?? {};
+        // Fetch the links from the cache or scrape them if not available
+        const allLinks = cache.get("allLinks") ?? {};
 
-    const searchResults = [];
-    Object.values(allLinks).forEach((pageLinks) => {
-      const results = pageLinks.filter((link) =>
-        link.h1.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      searchResults.push(...results);
+        const searchResults = [];
+        Object.values(allLinks).forEach((pageLinks) => {
+          const results = pageLinks.filter((link) =>
+            link.h1.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+          searchResults.push(...results);
+        });
+
+        console.log(searchResults); // Print the searchResults to the console
+        const searchResults = [];
+        Object.values(allLinks).forEach((pageLinks) => {
+          const results = pageLinks.filter((link) =>
+            link.h1.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+          searchResults.push(...results);
+        });
+
+        console.log(searchResults); // Print the searchResults to the console
+
+        // Send a JSON response with the matching links
+        res.json({ searchResults });
+      } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+      }
     });
-
-    console.log(searchResults); // Print the searchResults to the console
-
     // Send a JSON response with the matching links
     res.json({ searchResults });
   } catch (error) {
@@ -110,6 +186,11 @@ app.get("/search", async (req, res) => {
   }
 });
 
+// Start the server
+const port = 3000;
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
 // Start the server
 const port = 3000;
 app.listen(port, () => {
