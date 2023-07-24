@@ -1,6 +1,9 @@
 <div class="navbar flex justify-between items-center">
   <!-- This is code for hamburger icon-->
-  <div class="ham inline-block p-4 cursor-pointer md:hidden">
+  <div
+    class="ham inline-block p-4 cursor-pointer md:hidden"
+    onclick="myFunction()"
+  >
     <div class="line h-0.5 w-6 bg-white my-1"></div>
     <div class="line h-0.5 w-6 bg-white my-1"></div>
     <div class="line h-0.5 w-6 bg-white my-1"></div>
@@ -29,7 +32,7 @@
         <a href="/">Home</a>
       </div>
       <div
-        class="item mx-6 my-6 md:my-0 cursor-pointer text-white"
+        class="item mx-6 my-6 md:my-0 cursor-pointer text-white navCourses"
         id="navCourses"
       >
         Courses
@@ -43,40 +46,38 @@
     </div>
   </div>
 
-  <!-- Code for Account -->
-  <!-- <div class="text-white acc text-center w-8 mr-10">
-    <img src="./images/account.png" alt="" />
-  </div> -->
-
-  <!-- <section class="contain">
-    <form>
-      <input
-        type="text"
-        name=""
-        id="search-item"
-        placeholder="Search Courses"
-        onkeyup="search()"
-      />
-      <i class="fa-solid fa-magnifying-glass fa-xl text-white pl-3"></i>
-    </form>
-  </section>
-</div> -->
-
   <section class="contain">
     <form
       class="md:flex md:justify-center items-center"
       onsubmit="event.preventDefault(); search();"
     >
-      <input
-        class="hidden md:block"
-        type="text"
-        name="term"
-        id="search-item"
-        placeholder="Search Courses"
-      />
-      <button>
-        <i class="fa-solid fa-magnifying-glass fa-xl text-white pl-3"></i>
-      </button>
+      <div class="search-box hidden md:block">
+        <input
+          type="text"
+          name="term"
+          id="search-item"
+          placeholder="Search Courses"
+        />
+        <button>
+          <i class="fa-solid fa-magnifying-glass fa-xl text-white pl-3"></i>
+        </button>
+      </div>
     </form>
   </section>
+</div>
+
+<div class="topnav">
+  <!-- Navigation links (hidden by default) -->
+  <div id="myLinks">
+    <div id="search-sec">
+      <input type="text" placeholder="Search Courses" id="searchInput" />
+      <button id="searchButton">
+        <i class="fa-solid fa-magnifying-glass fa-xl text-white pl-3"></i>
+      </button>
+    </div>
+    <a href="/">Home</a>
+    <a id="navCourses2">Courses</a>
+    <a href="#about">About Us</a>
+    <a href="/">Privacy Policy</a>
+  </div>
 </div>

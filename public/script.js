@@ -1,6 +1,7 @@
 // Get the button element
 const exploreCoursesBtn = document.getElementById("exploreCoursesBtn");
 const navCoursesButton = document.getElementById("navCourses");
+const navCoursesButton2 = document.getElementById("navCourses2");
 
 // Scroll to the Recent Courses section when the button is clicked
 exploreCoursesBtn.addEventListener("click", () => {
@@ -11,6 +12,21 @@ navCoursesButton.addEventListener("click", () => {
   const recentCoursesSection = document.querySelector(".header");
   recentCoursesSection.scrollIntoView({ behavior: "smooth" });
 });
+navCoursesButton2.addEventListener("click", () => {
+  const recentCoursesSection = document.querySelector(".header");
+  recentCoursesSection.scrollIntoView({ behavior: "smooth" });
+});
+
+function toggleSearch() {
+  const searchBox = document.querySelector(".search-box");
+  searchBox.classList.toggle("show-search");
+}
+
+/* Toggle between showing and hiding the navigation menu links when the user clicks on the hamburger menu / bar icon */
+function myFunction() {
+  var x = document.getElementById("myLinks");
+  x.classList.toggle("shownav");
+}
 
 // Function to check if an element is in the viewport
 function isElementInViewport(element) {
@@ -98,3 +114,83 @@ const search = async () => {
     console.error(error);
   }
 };
+
+// JavaScript
+const searchInput = document.getElementById("searchInput");
+const searchButton = document.getElementById("searchButton");
+const contentDiv = document.getElementById("content");
+
+searchButton.addEventListener("click", async () => {
+  const searchTerm = searchInput.value.trim();
+  if (searchTerm !== "") {
+    try {
+      const response = await fetch(
+        `/search?term=${encodeURIComponent(searchTerm)}`
+      );
+      const data = await response.json();
+      const searchResults = data.searchResults;
+
+      if (searchResults.length === 0) {
+        contentDiv.innerHTML = "<p>No results found.</p>";
+      } else {
+        // Display the search results in the existing content container
+        contentDiv.innerHTML = ""; // Clear existing content
+
+        searchResults.forEach((result) => {
+          const linkElement = document.createElement("a");
+          linkElement.href = `/course/${result.page}/${encodeURIComponent(
+            result.h1
+          )}`;
+
+          // Create card div and its contents
+          const cardDiv = document.createElement("div");
+          cardDiv.classList.add(
+            "card",
+            "flex",
+            "flex-col",
+            "justify-between",
+            "pb-6"
+          );
+
+          const imageElement = document.createElement("img");
+          imageElement.src = result.image;
+          imageElement.alt = "";
+
+          const courseDetailsDiv = document.createElement("div");
+          courseDetailsDiv.classList.add("courseDetails");
+
+          const h4Element = document.createElement("h4");
+          h4Element.textContent = result.h1;
+
+          const pElement = document.createElement("p");
+          pElement.textContent = result.desc;
+
+          const buttonElement = document.createElement("button");
+          buttonElement.classList.add("cardBtn", "ml-auto", "mr-auto");
+          buttonElement.innerHTML = "<span>Preview This Course</span>";
+
+          // Append elements to the card div
+          courseDetailsDiv.appendChild(h4Element);
+          courseDetailsDiv.appendChild(pElement);
+
+          cardDiv.appendChild(imageElement);
+          cardDiv.appendChild(courseDetailsDiv);
+          cardDiv.appendChild(buttonElement);
+
+          // Append card div to the link element
+          linkElement.appendChild(cardDiv);
+
+          // Append the link element to the content container
+          contentDiv.appendChild(linkElement);
+        });
+
+        // Scroll to the search results
+        contentDiv.scrollIntoView({ behavior: "smooth" });
+      }
+    } catch (error) {
+      console.error(error);
+      contentDiv.innerHTML =
+        "<p>Error occurred while fetching search results.</p>";
+    }
+  }
+});

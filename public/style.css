@@ -12,7 +12,67 @@
   background-color: #031d44;
 }
 
+.show-search {
+  display: inline-block !important;
+    position: relative;
+  margin-top: 40px;
+  z-index: 1;
+  right: 0;
+}
 
+/* Position the search box below the navbar */
+.search-box {
+
+}
+
+/* Style the navigation menu */
+.topnav {
+  overflow: hidden;
+  background-color: #031d44;
+  position: relative;
+}
+
+/* Hide the links inside the navigation menu (except for logo/home) */
+.topnav #myLinks {
+  display: none;
+  transition: display 0.3s ease;
+}
+
+.shownav{
+  display: block !important ;
+    transition: display 0.3s ease;
+  
+}
+
+/* Style navigation menu links */
+.topnav a {
+  color: white;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  display: block;
+}
+
+/* Style the hamburger menu */
+.topnav a.icon {
+  background: black;
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+/* Add a grey background color on mouse-over */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Style the active link (or home/logo) */
+.active {
+  background-color: #04AA6D;
+  color: white;
+}
 
 .learn {
   font-size: 3rem;
@@ -385,6 +445,18 @@
   padding-left: 13px;
   padding-top: 4px;
   padding-bottom: 4px;
+}
+#searchInput{
+  border-radius: 20px;
+  width: 14rem;
+  font-weight: 600;
+  padding-left: 13px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#search-sec{
+  margin: 12px;
 }
 
 .contain .form input{
