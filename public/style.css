@@ -91,7 +91,7 @@
 .btn {
   color: aliceblue;
   background-color: #031d44;
-  width: 250px;
+  width: 200px;
   padding: 20px;
   margin: 20px 0px 0 0px;
   border-radius: 6px;
@@ -465,4 +465,12 @@
   box-shadow: none;
   width: 100%;
   font-size: 16px;
+}
+
+
+@media screen and (min-width: 768px) {
+
+  #joinTeleBtn{
+    margin-left: 10px;
+  }
 }
